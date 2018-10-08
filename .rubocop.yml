@@ -1,0 +1,34 @@
+AllCops:
+  TargetRubyVersion: 3.0
+  NewCops: enable
+  Exclude:
+    - 'doc/*'
+    - 'tmp/*'
+    - 'pkg/*'
+
+plugins:
+  - rubocop-minitest
+  - rubocop-rake
+
+Layout/MultilineOperationIndentation:
+  Enabled: false
+
+Metrics/AbcSize:
+  Enabled: false
+Metrics/MethodLength:
+  Enabled: false
+Metrics/ModuleLength:
+  Enabled: false
+
+Minitest/UselessAssertion:
+  Enabled: false
+
+Rake/Desc:
+  Enabled: false
+
+Style/BlockDelimiters:
+  Enabled: false
+Style/Documentation:
+  Enabled: false
+Style/FrozenStringLiteralComment:
+  Enabled: false

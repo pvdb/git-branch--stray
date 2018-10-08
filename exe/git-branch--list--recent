@@ -1,0 +1,56 @@
+#!/usr/bin/env ruby
+
+#
+# inspiration taken from:
+#
+# https://github.com/paulirish/git-recent
+#
+
+nl = '%0a' # ASCII NEWLINE
+delim = '%07' # ASCII BELL
+
+head = '%(if)%(HEAD)%(then)%(end)'     # emoji prefix for current branch
+empty = '%(color:black) %(color:reset)' # to make `column` work correctly
+
+pattern, deref = if ARGV.delete('--tags')
+                   ['refs/tags', '*']
+                 elsif ARGV.delete('--all')
+                   'refs/heads refs/remotes'
+                 elsif ARGV.delete('--remotes')
+                   'refs/remotes'
+                 else
+                   'refs/heads'
+                 end
+
+branch_name = '%(refname:short)'
+branch_name = "%(color:yellow)#{branch_name}%(color:reset)"
+
+object_name = '%(objectname:short)'
+object_name = "%(color:red)#{object_name}%(color:reset)"
+
+commit_date = "%(#{deref}committerdate:relative)"
+commit_date = "%(color:bold green)(#{commit_date})%(color:reset)"
+
+author_name = "%(#{deref}authorname)"
+author_name = "%(color:bold blue)#{author_name}%(color:reset)"
+
+commit_subject = '%(contents:subject)'
+
+format = "#{head} #{branch_name}#{delim}"
+format = "#{format}#{object_name} #{commit_date} #{author_name}"
+format = "#{format}#{nl}#{empty}#{delim}#{commit_subject}"
+format = "#{format}#{nl}#{empty}#{delim}" # empty separator line
+
+require 'shellwords'
+
+cmd = <<-"EOCMD"
+  git for-each-ref \
+  --color=always \
+  --sort=-committerdate \
+  --format="#{format}" \
+  #{pattern} #{ARGV.shelljoin} | column -t -s $'\a' | less --RAW-CONTROL-CHARS
+EOCMD
+
+Kernel.exec(cmd)
+
+# That's all Folks!

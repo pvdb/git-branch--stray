@@ -1,0 +1,21 @@
+#!/usr/bin/env ruby
+
+lib = File.expand_path('../../lib', __FILE__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+require 'git/branch/stray'
+
+%w[TERM INT].each do |signal|
+  Signal.trap(signal) do
+    exit(0)
+  end
+end
+
+if git('rev-parse --show-toplevel').first
+  Git.delete_stray_branches
+  exit(0)
+else
+  puts "Please run #{File.basename(__FILE__)} from inside a git repo!"
+  exit(-1)
+end
+
+# That's all Folks!

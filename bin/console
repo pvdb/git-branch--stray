@@ -5,3 +5,5 @@ require 'git/branch/stray'
 
 require 'pry'
 Pry.start
+
+# That's all Folks!

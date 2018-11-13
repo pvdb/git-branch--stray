@@ -3,7 +3,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'git/branch/stray/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = 'git-branch--stray'
+  spec.name          = Git::Branch::Stray::NAME
   spec.version       = Git::Branch::Stray::VERSION
   spec.authors       = ['Peter Vandenberk']
   spec.email         = ['pvandenberk@mac.com']
@@ -11,6 +11,7 @@ Gem::Specification.new do |spec|
   spec.summary       = 'Delete local tracking branches that have been strayed'
   spec.description   = 'Delete local tracking branches that have been strayed'
   spec.homepage      = 'https://github.com/pvdb/git-branch--stray'
+  spec.license       = 'MIT'
 
   spec.files         = Dir.chdir(File.expand_path(__dir__)) do
     `git ls-files -z`
@@ -23,8 +24,8 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'consenter', '~> 1.0'
 
-  spec.add_development_dependency 'bundler', '~> 1.16'
-  spec.add_development_dependency 'minitest', '~> 5.0'
-  spec.add_development_dependency 'pry', '~> 0.11'
-  spec.add_development_dependency 'rake', '~> 10.0'
+  spec.add_development_dependency 'bundler'
+  spec.add_development_dependency 'pry'
+  spec.add_development_dependency 'rake'
+  spec.add_development_dependency 'rubocop'
 end

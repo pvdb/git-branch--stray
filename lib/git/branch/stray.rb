@@ -71,6 +71,7 @@ module Git
     stray_branches.each_consented('Delete stray branch "%s"') do |stray|
       system("git branch -d #{stray}")
       next if $CHILD_STATUS.success?
+
       Array(stray).each_consented('Delete unmerged branch "%s"') do |unmerged|
         system("git branch -D #{unmerged}")
       end

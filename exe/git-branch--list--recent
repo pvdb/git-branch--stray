@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env ruby
 
 #
 # inspiration taken from:
@@ -6,50 +6,51 @@
 # https://github.com/paulirish/git-recent
 #
 
-NL='%0a' ; # ASCII NEWLINE
-DELIM='%07' ; # ASCII BELL
+nl = '%0a' # ASCII NEWLINE
+delim = '%07' # ASCII BELL
 
-HEAD="%(if)%(HEAD)%(then)%(end)" ;    # emoji prefix for current branch
-EMPTY='%(color:black) %(color:reset)' ; # to make `column` work correctly
+head = '%(if)%(HEAD)%(then)%(end)'     # emoji prefix for current branch
+empty = '%(color:black) %(color:reset)' # to make `column` work correctly
 
-case $1 in
-	--all)
-		PATTERN='refs/heads refs/remotes' ;
-		DEREF='' ;
-		shift ;
-		;;
-	--remotes)
-		PATTERN='refs/remotes' ;
-		DEREF='' ;
-		shift ;
-		;;
-	--tags)
-		PATTERN='refs/tags' ;
-		DEREF='*' ;
-		shift ;
-		;;
-	*)
-		PATTERN='refs/heads' ;
-		DEREF='' ;
-		;;
-esac
+pattern, deref = if ARGV.delete('--tags')
+                   ['refs/tags', '*']
+                 elsif ARGV.delete('--all')
+                   'refs/heads refs/remotes'
+                 elsif ARGV.delete('--remotes')
+                   'refs/remotes'
+                 else
+                   'refs/heads'
+                 end
 
-BRANCH_NAME="%(color:yellow)%(refname:short)%(color:reset)" ;
-OBJECT_NAME="%(color:red)%(objectname:short)%(color:reset)" ;
-COMMIT_DATE="%(color:bold green)(%(${DEREF}committerdate:relative))%(color:reset)" ;
-AUTHOR_NAME="%(color:bold blue)%(${DEREF}authorname)%(color:reset)" ;
+branch_name = '%(refname:short)'
+branch_name = "%(color:yellow)#{branch_name}%(color:reset)"
 
-COMMIT_SUBJECT='%(contents:subject)' ;
+object_name = '%(objectname:short)'
+object_name = "%(color:red)#{object_name}%(color:reset)"
 
-FORMAT="${HEAD} ${BRANCH_NAME}${DELIM}" ;
-FORMAT="${FORMAT}${OBJECT_NAME} ${COMMIT_DATE} ${AUTHOR_NAME}" ;
-FORMAT="${FORMAT}${NL}${EMPTY}${DELIM}${COMMIT_SUBJECT}" ;
-FORMAT="${FORMAT}${NL}${EMPTY}${DELIM}" ; # empty separator line
+commit_date = "%(#{deref}committerdate:relative)"
+commit_date = "%(color:bold green)(#{commit_date})%(color:reset)"
 
-git for-each-ref \
-	--color=always \
-	--sort=-committerdate \
-	--format="${FORMAT}" \
-	${PATTERN} "$@" | column -t -s $'\a' | less --RAW-CONTROL-CHARS ;
+author_name = "%(#{deref}authorname)"
+author_name = "%(color:bold blue)#{author_name}%(color:reset)"
+
+commit_subject = '%(contents:subject)'
+
+format = "#{head} #{branch_name}#{delim}"
+format = "#{format}#{object_name} #{commit_date} #{author_name}"
+format = "#{format}#{nl}#{empty}#{delim}#{commit_subject}"
+format = "#{format}#{nl}#{empty}#{delim}" # empty separator line
+
+require 'shellwords'
+
+cmd = <<-"EOCMD"
+  git for-each-ref \
+  --color=always \
+  --sort=-committerdate \
+  --format="#{format}" \
+  #{pattern} #{ARGV.shelljoin} | column -t -s $'\a' | less --RAW-CONTROL-CHARS
+EOCMD
+
+Kernel.exec(cmd)
 
 # That's all Folks!

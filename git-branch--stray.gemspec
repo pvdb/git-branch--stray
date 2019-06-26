@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ['Peter Vandenberk']
   spec.email         = ['pvandenberk@mac.com']
 
-  spec.summary       = 'Delete local tracking branches that have been strayed'
-  spec.description   = 'Delete local tracking branches that have been strayed'
+  spec.summary       = 'Delete stray local remote-tracking branches'
+  spec.description   = 'Delete stray local remote-tracking branches'
   spec.homepage      = 'https://github.com/pvdb/git-branch--stray'
   spec.license       = 'MIT'
 
@@ -25,6 +25,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'consenter', '~> 1.0'
 
   spec.add_development_dependency 'bundler'
+  spec.add_development_dependency 'minitest'
   spec.add_development_dependency 'pry'
   spec.add_development_dependency 'rake'
   spec.add_development_dependency 'rubocop'

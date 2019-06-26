@@ -1,6 +1,7 @@
 lib = File.expand_path('lib', __dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'git/branch/stray/version'
+require 'git/branch/stray/gemspec'
 
 Gem::Specification.new do |spec|
   spec.name          = Git::Branch::Stray::NAME
@@ -21,6 +22,8 @@ Gem::Specification.new do |spec|
   spec.bindir        = 'exe'
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ['lib']
+
+  spec.post_install_message = Git::Branch::Stray::PIM
 
   spec.add_dependency 'consenter', '~> 1.0'
 

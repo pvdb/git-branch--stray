@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+
+#
+# inspiration taken from:
+#
+# https://github.com/paulirish/git-recent
+#
+
+NL='%0a' ; # ASCII NEWLINE
+DELIM='%07' ; # ASCII BELL
+
+HEAD="%(if)%(HEAD)%(then)%(end)" ;    # emoji prefix for current branch
+EMPTY='%(color:black) %(color:reset)' ; # to make `column` work correctly
+
+case $1 in
+	--all)
+		PATTERN='refs/heads refs/remotes' ;
+		DEREF='' ;
+		shift ;
+		;;
+	--remotes)
+		PATTERN='refs/remotes' ;
+		DEREF='' ;
+		shift ;
+		;;
+	--tags)
+		PATTERN='refs/tags' ;
+		DEREF='*' ;
+		shift ;
+		;;
+	*)
+		PATTERN='refs/heads' ;
+		DEREF='' ;
+		;;
+esac
+
+BRANCH_NAME="%(color:yellow)%(refname:short)%(color:reset)" ;
+OBJECT_NAME="%(color:red)%(objectname:short)%(color:reset)" ;
+COMMIT_DATE="%(color:bold green)(%(${DEREF}committerdate:relative))%(color:reset)" ;
+AUTHOR_NAME="%(color:bold blue)%(${DEREF}authorname)%(color:reset)" ;
+
+COMMIT_SUBJECT='%(contents:subject)' ;
+
+FORMAT="${HEAD} ${BRANCH_NAME}${DELIM}" ;
+FORMAT="${FORMAT}${OBJECT_NAME} ${COMMIT_DATE} ${AUTHOR_NAME}" ;
+FORMAT="${FORMAT}${NL}${EMPTY}${DELIM}${COMMIT_SUBJECT}" ;
+FORMAT="${FORMAT}${NL}${EMPTY}${DELIM}" ; # empty separator line
+
+git for-each-ref \
+	--color=always \
+	--sort=-committerdate \
+	--format="${FORMAT}" \
+	${PATTERN} "$@" | column -t -s $'\a' | less --RAW-CONTROL-CHARS ;
+
+# That's all Folks!

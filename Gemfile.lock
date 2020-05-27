@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    git-branch--stray (1.6.0)
+    git-branch--stray (1.7.0)
       consenter (~> 1.0)
 
 GEM

@@ -3,6 +3,20 @@ require 'git/branch/stray/version'
 require 'English'
 require 'consenter'
 
+class String
+  def colorize(color_code)
+    "\e[#{color_code}m#{self}\e[0m"
+  end
+
+  def red
+    colorize('31')
+  end
+
+  def yellow
+    colorize('33')
+  end
+end
+
 module Kernel
   def git(command)
     `git #{command}`.split($RS).each(&:strip!)
@@ -67,16 +81,18 @@ module Git
     }
   end
 
+  # rubocop:disable Layout/LineLength
   def delete_stray_branches
-    stray_branches.each_consented('Delete stray branch "%s"') do |stray|
+    stray_branches.each_consented('Delete stray branch "%s"', inspector: :yellow) do |stray|
       system("git branch -d #{stray}")
       next if $CHILD_STATUS.success?
 
-      Array(stray).each_consented('Delete unmerged branch "%s"') do |unmerged|
+      Array(stray).each_consented('Delete unmerged branch "%s"', inspector: :red) do |unmerged|
         system("git branch -D #{unmerged}")
       end
     end
   end
+  # rubocop:enable Layout/LineLength
 
   def list_stray_branches
     stray_branches.each do |stray|

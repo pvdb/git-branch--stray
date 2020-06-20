@@ -24,7 +24,6 @@ module Kernel
 end
 
 module Git
-
   module_function
 
   def local_head_refs
@@ -81,7 +80,6 @@ module Git
     }
   end
 
-  # rubocop:disable Layout/LineLength
   def delete_stray_branches
     stray_branches.each_consented('Delete stray branch "%s"', inspector: :yellow) do |stray|
       system("git branch -d #{stray}")
@@ -92,12 +90,10 @@ module Git
       end
     end
   end
-  # rubocop:enable Layout/LineLength
 
   def list_stray_branches
     stray_branches.each do |stray|
       system("git --no-pager branch -vv --list #{stray}")
     end
   end
-
 end

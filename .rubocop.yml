@@ -1,11 +1,19 @@
-Layout/EmptyLinesAroundModuleBody:
-  Enabled: false
+AllCops:
+  TargetRubyVersion: 2.6
+  NewCops: enable
+  Exclude:
+    - 'doc/*'
+    - 'tmp/*'
+    - 'pkg/*'
+
 Layout/MultilineOperationIndentation:
   Enabled: false
 
 Metrics/AbcSize:
   Enabled: false
 Metrics/MethodLength:
+  Enabled: false
+Metrics/ModuleLength:
   Enabled: false
 
 Style/BlockDelimiters:
@@ -14,21 +22,3 @@ Style/Documentation:
   Enabled: false
 Style/FrozenStringLiteralComment:
   Enabled: false
-
-#
-# enable so-called "pending cops"
-# after "minor" RuboCop upgrades!
-#
-# https://docs.rubocop.org/en/latest/versioning/#pending-cops
-#
-
-Style/HashEachMethods:
-  Enabled: true
-Style/HashTransformKeys:
-  Enabled: true
-Style/HashTransformValues:
-  Enabled: true
-Lint/RaiseException:
-  Enabled: true
-Lint/StructNewOverride:
-  Enabled: true

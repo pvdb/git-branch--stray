@@ -18,7 +18,7 @@ But that's not the only scenario that results in "stray" branches, which is why 
 
 In the context of this utility, a branch is considered "stray" if it is what git calls [a "remote-tracking" branch](https://git-scm.com/book/id/v2/Git-Branching-Remote-Branches#_tracking_branches), but one where the remote branch it was tracking no longer exists _(ie. where the branch it was tracking has been deleted on the remote, e.g. on GitHub or on Bitbucket)_.
 
-The term "stray" was chosen to avoid confusion with existing git terminology like ''merged", "tracked" and even "orpaned".
+The term "stray" was chosen to avoid confusion with existing git terminology like ''merged", "tracked" and even "orphaned".
 
 Also, the names of the two git extensions implemented by this utility:
 

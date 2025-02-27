@@ -27,7 +27,7 @@ module Git
   module_function
 
   def local_head_refs
-    git("for-each-ref --format='%(refname)' refs/heads")
+    git("for-each-ref --format=\"%(refname)\" refs/heads")
   end
 
   def head_refs_for(remote)
@@ -41,7 +41,7 @@ module Git
     # used as part of a "git workflow" that includes
     # regular pruning of remote tracking references,
     # which means we don't have to go over the wire!
-    git("for-each-ref --format='%(refname)' refs/remotes/#{remote}")
+    git("for-each-ref --format=\"%(refname)\" refs/remotes/#{remote}")
   end
 
   def upstream_reference_for(branch)
